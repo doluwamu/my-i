@@ -1,24 +1,71 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getPackages, register } from "../actions/userActions";
 
-const SignupScreen = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [businessName, setBusinessName] = useState("");
+const SignupScreen = ({ history }) => {
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [business_name, setBusinessName] = useState("");
+  const [package_name, setPackageName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  console.log(package_name);
+
+  const userRegister = useSelector((state) => state.register);
+  const { loading, error, userRegInfo } = userRegister;
+
+  const getPackage = useSelector((state) => state.packageDetails);
+  const { loading: pkLoading, error: pkError, packageDetails } = getPackage;
+  debugger;
+
+  // useEffect(() => {
+
+  // }, [dispatch, userRegInfo, history]);
 
   const handleRegister = (e) => {
     e.preventDefault();
+    dispatch(
+      register(
+        first_name,
+        last_name,
+        business_name,
+        package_name,
+        phone,
+        email,
+        password
+      )
+    );
+  };
+
+  const loadPackages = () => {
+    debugger;
+    dispatch(getPackages());
   };
 
   return (
     <>
-
-      <form className={`form-container ${darkTheme ? "dark" : "light"}`}>
-
+      <form className={`form-container`}>
         <h2>Register</h2>
+
+        {error ? <h2>{error}</h2> : pkError && <h2>{pkError}</h2>}
+
+        {loading && <h2>Loading...</h2>}
+
+        {userRegInfo && (
+          <>
+            <p>We've sent an OTP to this email address</p>
+            <p>
+              Click <Link to="/verify">here</Link> and enter OTP and verify your
+              account
+            </p>
+          </>
+        )}
 
         <div className="form-elements">
           <div className="form-element">
@@ -28,7 +75,7 @@ const SignupScreen = () => {
                 type="text"
                 name="First name"
                 placeholder="Write here"
-                value={firstName}
+                value={first_name}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
@@ -41,7 +88,7 @@ const SignupScreen = () => {
                 type="text"
                 name="Last name"
                 placeholder="Write here"
-                value={lastName}
+                value={last_name}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </div>
@@ -54,8 +101,39 @@ const SignupScreen = () => {
                 type="text"
                 name="Business Name"
                 placeholder="Write here"
-                value={businessName}
+                value={business_name}
                 onChange={(e) => setBusinessName(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-element">
+            <label>Select Package:</label>
+            <div className="input-element">
+              <select
+                value={package_name}
+                onChange={(e) => setPackageName(e.target.value)}
+                onClick={loadPackages}
+              >
+                <option value="">Select</option>
+                {pkLoading && <option>Loading...</option>}
+                {packageDetails &&
+                  packageDetails.data.map((pack) => {
+                    return <option value={pack.name}>{pack.name}</option>;
+                  })}
+              </select>
+            </div>
+          </div>
+
+          <div className="form-element">
+            <label>Phone:</label>
+            <div className="input-element">
+              <input
+                type="text"
+                name="Phone"
+                placeholder="Write here"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
           </div>
@@ -70,17 +148,6 @@ const SignupScreen = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-            </div>
-          </div>
-
-          <div className="form-element">
-          	<label>Select Package:</label>
-            <div className="input-element">
-              <select >
-              	<option value=''>Select</option>
-              	<option>Hello</option>
-              	<option>Hello</option>
-              </select>
             </div>
           </div>
 
@@ -112,7 +179,7 @@ const SignupScreen = () => {
 
           <div className="form-element">
             <button type="submit" onClick={handleRegister}>
-             Register
+              Register
             </button>
           </div>
         </div>

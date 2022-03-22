@@ -1,12 +1,13 @@
 {
   "name": "piwllo",
   "version": "0.1.0",
+  "proxy": "http://couriax-saas-api.eba-huvccy4z.us-east-1.elasticbeanstalk.com",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
-    "node-sass": "^6.0.1",
+    "axios": "^0.26.1",
     "react": "^17.0.1",
     "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.1",
@@ -15,6 +16,8 @@
     "react-router-dom": "^6.0.1",
     "react-scripts": "4.0.1",
     "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

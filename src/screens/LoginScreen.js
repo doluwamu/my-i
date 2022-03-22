@@ -1,18 +1,34 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../actions/userActions";
+import { Link, Navigate } from "react-router-dom";
 
-const SigninScreen = () => {
+const SigninScreen = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const userLogin = useSelector((state) => state.login);
+  const { loading, error, userInfo } = userLogin;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userInfo) {
+      return <h2>You have logged in successfully</h2>
+    }
+  }, [userInfo]);
+
   const handleSignIn = (e) => {
     e.preventDefault();
+    dispatch(login(email, password));
   };
 
   return (
     <>
-      <form className='form-container'>
+      {error && <h2>{error}</h2>}
+      {loading && <h2>Loading...</h2>}
 
+      <form className="form-container">
         <h2>Login</h2>
 
         <div className="form-elements">
