@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { verifyUser } from "../actions/userActions";
 import { Link } from "react-router-dom";
 
-const VerifyUserScreen = ({ history }) => {
+const VerifyUserScreen = () => {
   const [OTP, setOTP] = useState("");
-  //   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const dispatch = useDispatch();
 
@@ -13,23 +13,38 @@ const VerifyUserScreen = ({ history }) => {
   const { userRegInfo } = userRegister;
 
   const userVerification = useSelector((state) => state.verify);
-  const { success } = userVerification;
+  const { loading, success, error } = userVerification;
 
   useEffect(() => {
-    if (success) {
-      return history.push("/");
+    if (userRegInfo) {
+      setEmail(userRegInfo.data.email);
     }
-  }, [success, history]);
+  }, [userRegInfo]);
+
+  if (success) {
+    return (
+      <>
+        <h2>Account successfully verified</h2>
+        <h2>
+          click <Link to="/">here</Link>{" "}
+        </h2>
+      </>
+    );
+  }
 
   const handleVerifyUser = (e) => {
     e.preventDefault();
-    if (userRegInfo) dispatch(verifyUser(OTP, userRegInfo.data.email));
+    dispatch(verifyUser(OTP, email));
   };
 
   return (
     <>
+      {loading && <h2>Loading...</h2>}
+
+      {error && <h2>{error}</h2>}
+
       <form className="form-container">
-        <h2>Login</h2>
+        <h2>Verify Account</h2>
 
         <div className="form-elements">
           <div className="form-element">
@@ -41,6 +56,19 @@ const VerifyUserScreen = ({ history }) => {
                 placeholder="Enter otp"
                 value={OTP}
                 onChange={(e) => setOTP(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-element">
+            <label>Email:</label>
+            <div className="input-element">
+              <input
+                type="email"
+                name="Email"
+                placeholder="Write here"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>

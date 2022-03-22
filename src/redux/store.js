@@ -19,7 +19,7 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-const userRegInfoFromStorage = localStorage.getItem("userRegInfo")
+const userRegInfoFromStorage = sessionStorage.getItem("userRegInfo")
   ? JSON.parse(localStorage.getItem("userRegInfo"))
   : null;
 

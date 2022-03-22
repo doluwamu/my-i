@@ -33,15 +33,11 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    
-
     const { data } = await axios.post(
       `/api/v1/auth/login/`,
       { email, password },
       config
     );
-
-    
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -97,10 +93,8 @@ export const register =
         payload: data,
       });
 
-      localStorage.setItem("userRegInfo", JSON.stringify(data));
+      sessionStorage.setItem("userRegInfo", JSON.stringify(data));
     } catch (error) {
-      
-      console.log(error.response.data);
       dispatch({
         type: USER_REGISTER_FAIL,
         payload: "Something went wrong",
@@ -143,7 +137,6 @@ export const getPackages = () => async (dispatch) => {
     dispatch({
       type: GET_PACKAGE_REQUEST,
     });
-    
 
     const config = {
       headers: {
