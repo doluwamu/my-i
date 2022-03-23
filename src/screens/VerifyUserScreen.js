@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyUser } from "../actions/userActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const VerifyUserScreen = () => {
   const [OTP, setOTP] = useState("");
@@ -12,21 +12,30 @@ const VerifyUserScreen = () => {
   const userRegister = useSelector((state) => state.register);
   const { userRegInfo } = userRegister;
 
+  const userLogin = useSelector((state) => state.login);
+  const { userInfo } = userLogin;
+
   const userVerification = useSelector((state) => state.verify);
   const { loading, success, error } = userVerification;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userRegInfo) {
       setEmail(userRegInfo.data.email);
     }
-  }, [userRegInfo]);
+
+    if (userInfo) {
+      navigate("/verify");
+    }
+  }, [userRegInfo, userInfo, navigate]);
 
   if (success) {
     return (
       <>
         <h2>Account successfully verified</h2>
         <h2>
-          click <Link to="/">here</Link>{" "}
+          click <Link to="/">here</Link> to login{" "}
         </h2>
       </>
     );

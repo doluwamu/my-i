@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/userActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SigninScreen = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -11,12 +11,17 @@ const SigninScreen = ({ history }) => {
   const { loading, error, userInfo } = userLogin;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  if (userInfo) {
-    return <h2>You have logged in successfully</h2>;
-  }
+  // if (userInfo) {
+  //   navigate("/home");
+  // }
 
-  // useEffect(() => {}, [userInfo]);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/home");
+    }
+  }, [userInfo, navigate]);
 
   const handleSignIn = (e) => {
     e.preventDefault();

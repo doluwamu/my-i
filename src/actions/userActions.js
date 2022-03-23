@@ -44,7 +44,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    sessionStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -95,6 +95,7 @@ export const register =
 
       sessionStorage.setItem("userRegInfo", JSON.stringify(data));
     } catch (error) {
+      // console.log(error.response.data);
       dispatch({
         type: USER_REGISTER_FAIL,
         payload: "Something went wrong",
@@ -125,6 +126,7 @@ export const verifyUser = (otp, email) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    console.log(error.response.data);
     dispatch({
       type: USER_VERIFY_FAIL,
       payload: "Something went wrong",

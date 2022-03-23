@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPackages, register } from "../actions/userActions";
 
-const SignupScreen = ({ history }) => {
+const SignupScreen = () => {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [business_name, setBusinessName] = useState("");
@@ -15,18 +15,23 @@ const SignupScreen = ({ history }) => {
 
   const dispatch = useDispatch();
 
-  console.log(package_name);
-
   const userRegister = useSelector((state) => state.register);
   const { loading, error, userRegInfo } = userRegister;
 
+  const userLogin = useSelector((state) => state.login);
+  const { userInfo } = userLogin;
+
   const getPackage = useSelector((state) => state.packageDetails);
-  const { loading: pkLoading, error: pkError, packageDetails } = getPackage;
-  debugger;
+  const { error: pkError, packageDetails } = getPackage;
 
-  // useEffect(() => {
+  const navigate = useNavigate();
 
-  // }, [dispatch, userRegInfo, history]);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/home");
+    }
+    dispatch(getPackages());
+  }, [dispatch, userInfo, navigate]);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -43,10 +48,9 @@ const SignupScreen = ({ history }) => {
     );
   };
 
-  const loadPackages = () => {
-    debugger;
-    dispatch(getPackages());
-  };
+  // const loadPackages = () => {
+  //   dispatch(getPackages());
+  // };
 
   return (
     <>
@@ -113,13 +117,16 @@ const SignupScreen = ({ history }) => {
               <select
                 value={package_name}
                 onChange={(e) => setPackageName(e.target.value)}
-                onClick={loadPackages}
+                // onClick={loadPackages}
               >
                 <option value="">Select</option>
-                {pkLoading && <option>Loading...</option>}
                 {packageDetails &&
                   packageDetails.data.map((pack) => {
-                    return <option value={pack.name}>{pack.name}</option>;
+                    return (
+                      <option value={pack.name} key={pack.id}>
+                        {pack.name}
+                      </option>
+                    );
                   })}
               </select>
             </div>

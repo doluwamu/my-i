@@ -15,12 +15,12 @@ const reducer = combineReducers({
   packageDetails: packagesReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem("userInfo")
-  ? JSON.parse(localStorage.getItem("userInfo"))
+const userInfoFromStorage = sessionStorage.getItem("userInfo")
+  ? JSON.parse(sessionStorage.getItem("userInfo"))
   : null;
 
 const userRegInfoFromStorage = sessionStorage.getItem("userRegInfo")
-  ? JSON.parse(localStorage.getItem("userRegInfo"))
+  ? JSON.parse(sessionStorage.getItem("userRegInfo"))
   : null;
 
 const initialState = {
